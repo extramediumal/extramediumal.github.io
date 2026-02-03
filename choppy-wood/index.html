@@ -182,7 +182,7 @@
     <section class="beta-section">
         <h2>Be a Beta Tester</h2>
         <p>Get early access, help shape the game, and earn bragging rights when it blows up.</p>
-        <form class="beta-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <form class="beta-form" id="beta-form">
             <div class="platform-select">
                 <div class="platform-option">
                     <input type="radio" name="platform" value="android" id="android" required>
@@ -202,6 +202,35 @@
             <input type="email" name="email" class="email-input" placeholder="your@email.com" required>
             <button type="submit" class="submit-btn">Sign Me Up</button>
         </form>
+        <p id="form-success" style="display: none; text-align: center; color: #10b981; margin-top: 1.5rem; font-weight: 500;">You're in! We'll be in touch soon.</p>
+
+    <script>
+        document.getElementById('beta-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const btn = form.querySelector('.submit-btn');
+            const email = form.querySelector('[name="email"]').value;
+            const platform = form.querySelector('[name="platform"]:checked').value;
+
+            btn.textContent = 'Sending...';
+            btn.disabled = true;
+
+            try {
+                await fetch('https://script.google.com/macros/s/AKfycbwHVZjsj80geomDLSScKBQ2DVnzomjnshrfpWwuCposIN6Es0uAY3s0oeayeARenraSfg/exec', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, platform })
+                });
+                form.style.display = 'none';
+                document.getElementById('form-success').style.display = 'block';
+            } catch (err) {
+                btn.textContent = 'Sign Me Up';
+                btn.disabled = false;
+                alert('Something went wrong. Please try again.');
+            }
+        });
+    </script>
     </section>
 
     <footer>
